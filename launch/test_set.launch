@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="djh_ins" name="djh_ins_node" type="djh_ins_node" output="screen">
+        <!-- Default parameter settings -->
+        <!-- NONE RIGHT NOW -->
+    </node>
+
+</launch>
