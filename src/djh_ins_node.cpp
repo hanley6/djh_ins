@@ -23,9 +23,12 @@
 #include <stdio.h>
 #include <time.h>
 #include <Eigen/Core>
+#include "imu_corrector.h"
 // Include the ROS C++ APIs
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "sensor_msgs/Imu.h"
+#include "geometry_msgs/PoseStamped.h"
 /*---------------- End Includes ----------------*/
 
 /*---------------- Globals ---------------------*/
@@ -52,9 +55,37 @@ using namespace Eigen;
 /*-------------------------------- Helpers ------------------------------------*/
 /*-----------------------------------------------------------------------------*/
 // This will get called when a new message has arrived on the appropriate topic.
-void imuCallback(const std_msgs::String::ConstPtr& msg)
+void imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
 {
-    ROS_INFO("I heard: [%s]", msg->data.c_str());
+    // Initialize the measurement vectors
+    Vector3d a_sf_i;
+    Vector3d w_i;
+    Vector3d biasg;
+    Vector3d biasa;
+
+    // Fill Accelerometer vector and gyroscope vector
+    a_sf_i << msg->linear_acceleration.x, msg->linear_acceleration.y, msg->linear_acceleration.z;
+    w_i << msg->angular_velocity.x, msg->angular_velocity.y, msg->angular_velocity.z;
+
+    // State biases (to be sent from another ROS node)
+    biasg << 0.0, 0.0, 0.0;
+    biasa << 0.0, 0.0, 0.0; 
+
+    // Correct the IMU measurements
+    imu_correct(a_sf_i,w_i,biasa,biasg);
+
+    // Print Results
+    cout << endl << a_sf_i << endl;
+
+    // INS output is a timestamped position and orientation
+    geometry_msgs::PoseStamped msg_out;
+    // Time stamp of the INS position should correspond to the IMU reading
+    msg_out.header.stamp = msg->header.stamp;
+
+    // Print out the INS Result
+    ROS_INFO("-------------------------------------");
+    cout << msg_out.header.stamp << endl;
+    ROS_INFO("-------------------------------------");
 }
 /*-----------------------------------------------------------------------------*/
 /*------------------------------ End Helpers ----------------------------------*/
@@ -76,13 +107,13 @@ int main(int argc, char **argv)
 
     // Initialize node handles
     ros::NodeHandle ns;
-    ros::NodeHandle np;
+    //ros::NodeHandle np;
 
     // Subscribe to IMU data
-    ros::Subscriber sub = ns.subscribe("imu_data",1000, imuCallback);
+    ros::Subscriber sub = ns.subscribe("/imu0",1000, imuCallback);
 
     // Setup publisher of INS results
-    ros::Publisher pub = np.advertise<std_msgs::String>("chatter",1000);
+    ros::Publisher pub = ns.advertise<std_msgs::String>("chatter",1000);
 
 	// Time initialization
 	t = clock();

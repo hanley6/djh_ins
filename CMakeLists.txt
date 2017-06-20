@@ -53,9 +53,9 @@ include_directories(
 )
 
 ## Declare a C++ library
-#add_library(initializer
-#            src/initialization.cpp
-#)
+add_library(imu_corrector
+            src/imu_corrector.cpp
+)
 
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
@@ -65,7 +65,7 @@ add_executable(djh_ins_node src/djh_ins_node.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(djh_ins_node
                       ${catkin_LIBRARIES}
-#                      initializer
+                      imu_corrector
 )
 
 #############
