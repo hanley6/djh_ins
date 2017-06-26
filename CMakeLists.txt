@@ -11,15 +11,31 @@ find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   roscpp
   roslib
+  image_transport
+  cv_bridge
+  message_generation
 )
 
 # Add plain cmake packages
 find_package(Eigen3 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 ################################################
 ## Declare ROS messages, services and actions ##
 ################################################
 
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+    compute_ins.msg
+)
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
+    std_msgs  
+    # Other packages containing msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -35,9 +51,16 @@ find_package(Eigen3 REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-    DEPENDS EIGEN3
-    INCLUDE_DIRS include
-#  CATKIN_DEPENDS cmake_modules roscpp roslib
+    DEPENDS 
+      EIGEN3 
+      OpenCV
+    CATKIN_DEPENDS 
+      roscpp 
+      image_transport 
+      cv_bridge
+      message_runtime
+    INCLUDE_DIRS 
+      include
 )
 
 ###########
@@ -49,12 +72,14 @@ catkin_package(
 include_directories(
   include
   ${EIGEN3_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-add_library(imu_corrector
+add_library(ins_lib
             src/imu_corrector.cpp
+            src/aggregator.cpp
 )
 
 ## Declare a C++ executable
@@ -65,7 +90,7 @@ add_executable(djh_ins_node src/djh_ins_node.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(djh_ins_node
                       ${catkin_LIBRARIES}
-                      imu_corrector
+                      ins_lib
 )
 
 #############
