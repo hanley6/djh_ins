@@ -46,6 +46,12 @@ class IMU_Aggregator
         bool stop_agg;
         // Desired time for an INS Solution
         double time_desired;
+        // This will get called when a new IMU message has arrived on the appropriate topic.
+        void imuCallback(const sensor_msgs::Imu::ConstPtr& msg);
+    private:
+        // Use a global aggregated IMU data output with a 
+        // dynamic number of rows and 7 columns
+        MatrixX7d AggregatedOutput;
         // aggregate outputs an aggregated matrix of IMU 
         // data collected over time.
         // Inputs:  Standard ROS IMU message
@@ -61,11 +67,5 @@ class IMU_Aggregator
         // Inputs:  Matrix of IMU data (in same form as from aggregate)
         // Outputs: Matrix of IMU data (in same form as from aggregate)
         MatrixXd PrunedIMUData(MatrixXd aggregated_meas);
-        // This will get called when a new IMU message has arrived on the appropriate topic.
-        void imuCallback(const sensor_msgs::Imu::ConstPtr& msg);
-    private:
-        // Use a global aggregated IMU data output with a 
-        // dynamic number of rows and 7 columns
-        MatrixX7d AggregatedOutput;
 };
 /*----------------- End Classes ----------------*/

@@ -86,11 +86,18 @@ add_library(ins_lib
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(djh_ins_node src/djh_ins_node.cpp)
+# Add additional node
+add_executable(bare_bones_node src/bare_bones_node.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(djh_ins_node
                       ${catkin_LIBRARIES}
                       ins_lib
+)
+
+# Now the other node
+target_link_libraries(bare_bones_node
+                      ${catkin_LIBRARIES}
 )
 
 #############

@@ -1,0 +1,43 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{#1}
+\csname url@rmstyle\endcsname
+\providecommand{\newblock}{\relax}
+\providecommand{\bibinfo}[2]{#2}
+\providecommand\BIBentrySTDinterwordspacing{\spaceskip=0pt\relax}
+\providecommand\BIBentryALTinterwordstretchfactor{4}
+\providecommand\BIBentryALTinterwordspacing{\spaceskip=\fontdimen2\font plus
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
+  \fontdimen4\font\relax}
+\providecommand\BIBforeignlanguage[2]{{%
+\expandafter\ifx\csname l@#1\endcsname\relax
+\typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
+\typeout{** loaded for the language `#1'. Using the pattern for}%
+\typeout{** the default language instead.}%
+\else
+\language=\csname l@#1\endcsname
+\fi
+#2}}
+
+\bibitem{Trawny:2005}
+N.~Trawny and S.~I. Roumeliotis, ``{Indirect Kalman Filter for 3D Attitude
+  Estimation: A Tutorial for Quaternion Algebra},'' University of Minnesota
+  Department of Computer Science and Engineering, Tech. Rep. 2005-002 Rev. 57,
+  March 2005.
+
+\bibitem{Forster:2017}
+C.~Forster, L.~Carlone, F.~Dellaert, and D.~Scaramuzza, ``{On-Manifold
+  Preintegration for Real-Time Visual-Inertial Odometry},'' \emph{IEEE
+  Transactions on Robotics}, vol.~33, no.~1, pp. 1--19, February 2017.
+
+\bibitem{Forster:2015}
+------, ``{IMU Preintegration on Manifold for Efficient Visual-Inertial
+  Maximum-a-Posteriori Estimation},'' in \emph{Proceedings of the Robotics:
+  Science and Systems (RSS)}, Sapienza University of Rome, July 2015.
+
+\bibitem{Eckenhoff:2016}
+K.~Eckenhoff, P.~Geneva, and G.~Huang, ``{High-Accuracy Preintegration for
+  Visual-Inertial Navigation},'' in \emph{Proceedings of the Workshop on the
+  Algorithmic Foundations of Robotics (WAFR)}, San Francisco, CA, December
+  2016.
+
+\end{thebibliography}
