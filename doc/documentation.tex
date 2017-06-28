@@ -71,6 +71,26 @@ Since the DJH INS package is a ROS node, it can interface with some navigation a
 
 \section{The IMU Model and Corrector}
 
+The elements of the aggregated matrix are corrected for fixed scale factors ($S_g$ and $S_a$), cross-coupling effects ($M_g$ and $M_a$), and biases ($B_{fg}$ and $B_{fa}$). These parameters (since they are fixed) are set in a parameter file called $\texttt{IMUmodel.yaml}$. We also assume that the navigation algorithm can potentially estimate some bias online ($B_g$ for the gyroscopes and $B_a$ for the accelerometers). Therefore, we have set up a subscriber to a ROS topic called $\texttt{bias\_est}$ which contains a $\texttt{std\_msgs::Float64MultiArray}$ message. The first three elements of the message are assumed to correspond to the x, y, and z-axis accelerometer biases respectively. The second three elements of the message are assumed to correspond to the x, y, and z-axis gyroscope biases respectively. Equations \ref{fig:gyrocorrect} and \ref{fig:accelcorrect} show how we use measurements from the gyroscopes, $\omega$, and accelerometers, $a_{sf}$, to compute corrected gyroscope, $\tilde{\omega}$, and accelerometer, $\tilde{a}_{sf}$, data. Figure \ref{fig:withonlinebias} shows the same information as Figure \ref{fig:accelcorrect}. However, now ROS topics relevant for IMU error correction is also included.
+
+\begin{equation}
+	\tilde{\omega} = (1 + S_g)\omega + M_g \omega + B_{fg} + B_g
+	\label{fig:gyrocorrect}
+\end{equation}
+
+\begin{equation}
+	\tilde{a}_{sf} = (1 + S_a)a_{sf} + M_a a_{sf} + B_{fa} + B_a
+	\label{fig:accelcorrect}
+\end{equation}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.42]{withonlinebias}
+	\caption{This ROS graph shows all the ROS topics associated with aggregating IMU data and with correcting IMU measurements.}
+	\label{fig:withonlinebias}
+\end{figure}
+
+
 \section{Integration Algorithms and Implementation}
 
 \section{Conclusion}

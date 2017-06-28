@@ -61,8 +61,20 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 {
     // Define the ROS publisher and the associated message
     static ros::NodeHandle get_ins;
+    static ros::NodeHandle ns_bias;
     static ros::Publisher comp_sol = get_ins.advertise<djh_ins::compute_ins>("comp_sol",1000);
+    static ros::Publisher bias_sub = ns_bias.advertise<std_msgs::Float64MultiArray>("bias_est",1000);
     static djh_ins::compute_ins msg_out;
+    static std_msgs::Float64MultiArray bias_msg;
+
+    // Set Bias message to publish
+    bias_msg.data.clear();
+    bias_msg.data.push_back(0.0); // Accelerometer x
+    bias_msg.data.push_back(0.0); // Accelerometer y
+    bias_msg.data.push_back(0.0); // Accelerometer z
+    bias_msg.data.push_back(0.0); // Gyroscope x
+    bias_msg.data.push_back(0.0); // Gyroscope y
+    bias_msg.data.push_back(0.0); // Gyroscope z
 
     // Throw flag that an INS State estimate is desired
     msg_out.stop_agg = true;
@@ -70,8 +82,9 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
     msg_out.time_desired = msg->header.stamp.toNSec()/1000000000.0;
     // We are going to publish this message now
     msg_out.header.stamp = ros::Time::now();
-    // Publish the message now
+    // Publish the messages now
     comp_sol.publish(msg_out);
+    bias_sub.publish(bias_msg);
 
     // Gets image from CV bridge and places it in "im1"
     Mat im1 = cv_bridge::toCvShare(msg,"bgr8")->image;

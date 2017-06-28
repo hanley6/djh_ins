@@ -71,9 +71,21 @@ void insCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
     Map<MatrixX7d>agg_mat(ptr,sz,7);
     /*----- End receive and reform aggregated IMU Matrix -----*/
 
-    cout << "-----------------------------------------------\n";
-    cout << agg_mat << endl;
-    cout << "-----------------------------------------------\n";
+    /*----------------- Correct the IMU Data -----------------*/
+    // Setup the subscriber to bias estimator and create an IMU 
+    // correction object once
+    static IMUCorrector imu_correct;
+    static ros::NodeHandle ns_bias;
+    static ros::Subscriber bias_sub = ns_bias.subscribe("/bias_est",1000, &IMUCorrector::biasCallback, &imu_correct);
+
+    // Correct IMU Measurements
+    imu_correct.imu_correct(agg_mat);
+    agg_mat = imu_correct.agg_corrected;
+    /*--------------- End Correct the IMU Data ---------------*/
+
+    /*----- INS Integration -----*/
+    // ADD STUFF HERE!!!
+    /*--- End INS Integration ---*/
 }
 /*-----------------------------------------------------------------------------*/
 /*------------------------------ End Helpers ----------------------------------*/
