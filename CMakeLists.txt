@@ -80,6 +80,7 @@ include_directories(
 add_library(ins_lib
             src/imu_corrector.cpp
             src/aggregator.cpp
+            src/quaternion_math.cpp
 )
 
 ## Declare a C++ executable

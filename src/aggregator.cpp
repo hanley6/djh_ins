@@ -1,11 +1,11 @@
 //
-//	IMU Corrector
+//	IMU Aggregator
 //	David Hanley, David Degenhardt, Alex Faustino
 //	
-//	imu_correct.cpp
-//	IMU Corrector header file for the Bretl Group 
-//  INS package. This corrects IMU measurements for
-//  bias.
+//	aggregator.cpp
+//	IMU Aggregator header file for the Bretl Group 
+//  INS package. This aggregates IMU measurements for
+//  use by either a navigation function or the INS.
 //
 //	Options:
 //

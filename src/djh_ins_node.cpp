@@ -25,6 +25,7 @@
 #include <Eigen/Core>
 #include "imu_corrector.h"
 #include "aggregator.h"
+#include "quaternion_math.h"
 // Include the ROS C++ APIs
 #include "ros/ros.h"
 #include "std_msgs/String.h"

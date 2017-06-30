@@ -5,6 +5,7 @@
 \usepackage{amsmath}
 \usepackage[margin=1in]{geometry}
 \usepackage{listings}
+\usepackage{hyperref}
 
 \title{The DJH INS ROS Package Documentation}
 \author{David Hanley, Alex Faustino, David Degenhardt, Tim Bretl}
@@ -90,12 +91,23 @@ The elements of the aggregated matrix are corrected for fixed scale factors ($S_
 	\label{fig:withonlinebias}
 \end{figure}
 
+\section{Quaternion Math Library}
+
+Our INS code makes significant use of the C++ library Eigen (\url{http://eigen.tuxfamily.org}). However, we do not make use of Eigen's quaternion functionalities. This is because we use a JPL convention for quaternions. More information on the JPL convention can be found at \cite{Trawny:2005,Barfoot:2011,Wie:2008}. There we create our own quaternion math class call $\texttt{QuatMath}$ which performs the following functions on JPL-style quaterions:
+\begin{itemize}
+	\item[1] Normalize the Quaternion
+	\item[2] Compute the Angle of Rotation
+	\item[3] Perform Quaternion Multiplication
+	\item[4] Compute the Quaternion Inverse
+	\item[5] Create a Rotation Matrix from a Quaternion
+	\item[6] Convert Rotation Matrix to a Quaterion.
+\end{itemize}
 
 \section{Integration Algorithms and Implementation}
 
 \section{Conclusion}
 
-blah blah blah \cite{Trawny:2005,Forster:2017,Forster:2015,Eckenhoff:2016}
+blah blah blah \cite{Forster:2017,Forster:2015,Eckenhoff:2016}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
