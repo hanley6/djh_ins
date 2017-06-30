@@ -14,6 +14,11 @@
 //	djh_ins_node.cpp	
 //
 
+/*---------------- Include Guard ---------------*/
+#ifndef imu_corrector_H
+#define imu_corrector_H
+/*-------------- End Include Guard -------------*/
+
 /*------------------ Includes ------------------*/
 #include <Eigen/Core>
 #include "std_msgs/Float64MultiArray.h"
@@ -75,3 +80,7 @@ class IMUCorrector
         Vector3d biasg;
 };
 /*----------------- End Classes ----------------*/
+
+/*---------------- Include Guard ---------------*/
+#endif
+/*-------------- End Include Guard -------------*/

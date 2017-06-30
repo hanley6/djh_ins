@@ -14,6 +14,11 @@
 //	djh_ins_node.cpp	
 //
 
+/*---------------- Include Guard ---------------*/
+#ifndef aggregator_H
+#define aggregator_H
+/*-------------- End Include Guard -------------*/
+
 /*------------------ Includes ------------------*/
 #include <Eigen/Core>
 #include "std_msgs/Float64MultiArray.h"
@@ -69,3 +74,7 @@ class IMU_Aggregator
         MatrixXd PrunedIMUData(MatrixXd aggregated_meas);
 };
 /*----------------- End Classes ----------------*/
+
+/*---------------- Include Guard ---------------*/
+#endif
+/*-------------- End Include Guard -------------*/
