@@ -102,6 +102,10 @@ Our INS code makes significant use of the C++ library Eigen (\url{http://eigen.t
 	\item[5] Create a Rotation Matrix from a Quaternion
 	\item[6] Convert Rotation Matrix to a Quaterion.
 \end{itemize}
+Note that to convert from a JPL quaternion to a Hamilton quaternion one must simply apply the following transformation
+\begin{equation}
+	q^{H}  = \left[\begin{array}{cccc} q^{JPL}_4 & -q^{JPL}_1  & -q^{JPL}_2  & -q^{JPL}_3 \end{array}\right]^T.
+\end{equation}
 
 \section{Integration Algorithms and Implementation}
 
