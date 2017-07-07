@@ -1,3 +1,7 @@
 Header header
 float64 time_desired
 bool stop_agg
+float64 start_time
+geometry_msgs/Pose start_pose
+geometry_msgs/Vector3 start_vel
+std_msgs/Float64MultiArray aggregatedMatrix

@@ -61,6 +61,17 @@ IMU_Aggregator::IMU_Aggregator()
 {
     stop_agg = false;
     time_desired = 0.0;
+    start_time = 0.0;
+    state(0) = 0.0;
+    state(1) = 0.0;
+    state(2) = 0.0; 
+    state(3) = 1.0;
+    state(4) = 0.0;
+    state(5) = 0.0;
+    state(6) = 0.0;
+    state(7) = 0.0;
+    state(8) = 0.0;
+    state(9) = 0.0;
 }
 
 // Parameterize IMU_Aggregator class constructor
@@ -68,11 +79,15 @@ IMU_Aggregator::IMU_Aggregator()
 //                            or false (continue aggregating) 
 //          time_desired_change = input double time (in sec) to 
 //                                compute INS solution
+//          state_change = input INS state
+//          start_time_change = input start time for INS state estimation
 // Outputs: stop_agg and time_desired assignments.
-IMU_Aggregator::IMU_Aggregator(bool stop_agg_change,double time_desired_change)
+IMU_Aggregator::IMU_Aggregator(bool stop_agg_change,double time_desired_change,VectorXd state_change,double start_time_change)
 {
     stop_agg = stop_agg_change;
     time_desired = time_desired_change;
+    state = state_change;
+    start_time = start_time_change;
 }
 
 // This callback function receives a compute_ins message and assigns 
@@ -83,6 +98,17 @@ void IMU_Aggregator::comp_ins_solCallback(const djh_ins::compute_ins::ConstPtr& 
 {
     stop_agg = msg->stop_agg;
     time_desired = msg->time_desired;
+    start_time = msg->start_time;
+    state(0) = msg->start_pose.orientation.x;
+    state(1) = msg->start_pose.orientation.y;
+    state(2) = msg->start_pose.orientation.z;
+    state(3) = msg->start_pose.orientation.w;
+    state(4) = msg->start_pose.position.x;
+    state(5) = msg->start_pose.position.y;
+    state(6) = msg->start_pose.position.z;
+    state(7) = msg->start_vel.x;
+    state(8) = msg->start_vel.y;
+    state(9) = msg->start_vel.z;
 }
 
 
@@ -95,7 +121,6 @@ void IMU_Aggregator::comp_ins_solCallback(const djh_ins::compute_ins::ConstPtr& 
 //          [timestamp1, accel_x1, accel_y1, accel_z1, gyro_x1, gyro_y1, gyro_z1]
 //          [timestamp2, accel_x2, accel_y2, accel_z2, gyro_x2, gyro_y2, gyro_z2]
 //          [...       , ...     , ...     , ...     , ...    , ...    , ...    ]
-//MatrixXd IMU_Aggregator::Aggregate(const sensor_msgs::Imu::ConstPtr& msg, bool& stop_agg)
 MatrixXd IMU_Aggregator::Aggregate(const sensor_msgs::Imu::ConstPtr& msg)
 {
     // Initialize the measurement vectors
@@ -138,7 +163,6 @@ MatrixXd IMU_Aggregator::Aggregate(const sensor_msgs::Imu::ConstPtr& msg)
 // Inputs:  Matrix of IMU data (in same form as from aggregate)
 //          time_desired = time of desired state estimate
 // Outputs: Matrix of IMU data (in same form as from aggregate)
-//MatrixXd IMU_Aggregator::PrunedIMUData(MatrixXd aggregated_meas, double time_desired)
 MatrixXd IMU_Aggregator::PrunedIMUData(MatrixXd aggregated_meas)
 {
     // Initialize the measurement vectors
@@ -186,8 +210,8 @@ void IMU_Aggregator::imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
     MatrixXd aggregated_meas;
     // Create Publisher as Float64MultiArray
     static ros::NodeHandle agg_topic;
-    static ros::Publisher pub_agg = agg_topic.advertise<std_msgs::Float64MultiArray>("aggregate_imu",1000);
-    static std_msgs::Float64MultiArray msg0;
+    static ros::Publisher pub_agg = agg_topic.advertise<djh_ins::compute_ins>("aggregate_imu",1000);
+    static djh_ins::compute_ins msg0;
     // Create subscriber of ins_compute
     static ros::NodeHandle agg_comp_ins;
     static IMU_Aggregator listener;
@@ -197,7 +221,7 @@ void IMU_Aggregator::imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
     {
 
         /*-------------------- Aggregate IMU Data --------------------*/
-       aggregated_meas = listener.Aggregate(msg);
+        aggregated_meas = listener.Aggregate(msg);
         /*------------------ End Aggregate IMU Data ------------------*/
     }
     else
@@ -214,9 +238,26 @@ void IMU_Aggregator::imuCallback(const sensor_msgs::Imu::ConstPtr& msg)
         // Turn Eigen Matrix to Vector
         vector<double> vec(aggregated_meas.data(), aggregated_meas.data()+aggregated_meas.rows()*aggregated_meas.cols());
         // Clear any old message data (just in case)
-        msg0.data.clear();
+        msg0.aggregatedMatrix.data.clear();
         // Assign aggregated data to message
-        msg0.data.insert(msg0.data.end(),vec.begin(),vec.end());
+        msg0.aggregatedMatrix.data.insert(msg0.aggregatedMatrix.data.end(),vec.begin(),vec.end());
+        // This assigns the time at which a desired INS solution is to be computed
+        msg0.time_desired = listener.time_desired;
+        // This assigns the stop agg flag to the message
+        msg0.stop_agg = listener.stop_agg;
+        // Set start time
+        msg0.start_time = listener.start_time;
+        // This assigns the initial state for the INS computation with the aggregated matrix
+        msg0.start_pose.orientation.x = listener.state(0);
+        msg0.start_pose.orientation.y = listener.state(1);
+        msg0.start_pose.orientation.z = listener.state(2);
+        msg0.start_pose.orientation.w = listener.state(3);
+        msg0.start_pose.position.x = listener.state(4);
+        msg0.start_pose.position.y = listener.state(5);
+        msg0.start_pose.position.z = listener.state(6);
+        msg0.start_vel.x = listener.state(7);
+        msg0.start_vel.y = listener.state(8);
+        msg0.start_vel.z = listener.state(9);
         // Publish the Aggregated Results
         pub_agg.publish(msg0);
         /*------------- End Publish Aggregated Result ----------------*/

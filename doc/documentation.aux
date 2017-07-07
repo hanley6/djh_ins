@@ -1,20 +1,71 @@
 \relax 
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}The IMU Aggregator}{1}}
-\@writefile{lol}{\contentsline {lstlisting}{[}{1}}
-\citation{Trawny:2005,Forster:2017,Forster:2015,Eckenhoff:2016}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}The IMU Aggregator}{1}{section.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The DJH INS package receives IMU data and a flag to stop aggregating that IMU data in a matrix. That aggregated data is then published and can be used by both the $\texttt  {djh\_ins\_node}$ for computing an INS solution or by some other node (in this case $\texttt  {bare\_bones\_node}$) for some other reason.}}{2}{figure.1}}
+\newlabel{fig:djhinsagg}{{1}{2}{The DJH INS package receives IMU data and a flag to stop aggregating that IMU data in a matrix. That aggregated data is then published and can be used by both the $\texttt {djh\_ins\_node}$ for computing an INS solution or by some other node (in this case $\texttt {bare\_bones\_node}$) for some other reason}{figure.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{[}{2}{lstlisting.-1}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}The IMU Model and Corrector}{2}{section.3}}
+\citation{Trawny:2005,Barfoot:2011,Wie:2008}
+\citation{Mirzaei:2008,Hesch:2014,Keivan:2015,Kelly:2011}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces This ROS graph shows all the ROS topics associated with aggregating IMU data and with correcting IMU measurements.}}{3}{figure.2}}
+\newlabel{fig:withonlinebias}{{2}{3}{This ROS graph shows all the ROS topics associated with aggregating IMU data and with correcting IMU measurements}{figure.2}{}}
+\newlabel{fig:gyrocorrect}{{1}{3}{The IMU Model and Corrector}{equation.3.1}{}}
+\newlabel{fig:accelcorrect}{{2}{3}{The IMU Model and Corrector}{equation.3.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Quaternion Math Library}{3}{section.4}}
+\citation{Li:2013}
+\citation{Jones:2011}
+\citation{Artal:2017}
+\citation{SavageP1:2007,SavageP2:2007}
+\citation{Titterton:2004}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Integration Algorithms and Implementation}{4}{section.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Gravity Model}{4}{subsection.5.1}}
+\citation{Burri:2016}
+\citation{Savage:2009}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces This ROS graph shows all the ROS topics associated with the DJH INS package.}}{5}{figure.3}}
+\newlabel{fig:finalgraph}{{3}{5}{This ROS graph shows all the ROS topics associated with the DJH INS package}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Equations of Motion}{5}{subsection.5.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Runge Kutta Integration and Run Time}{5}{subsection.5.3}}
+\citation{Forster:2017,Forster:2015,Eckenhoff:2016}
+\citation{Savage:2009}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The spin-cone test model.}}{6}{figure.4}}
+\newlabel{fig:spincone}{{4}{6}{The spin-cone test model}{figure.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Test Cases}{6}{section.6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}The Spin-Cone Truth Model}{6}{subsection.6.1}}
 \bibstyle{IEEEtran}
 \bibdata{IEEEabrv,references}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The DJH INS package receives IMU data and a flag to stop aggregating that IMU data in a matrix. That aggregated data is then published and can be used by both the $\texttt  {djh\_ins\_node}$ for computing an INS solution or by some other node (in this case $\texttt  {bare\_bones\_node}$) for some other reason.}}{2}}
-\newlabel{fig:djhinsagg}{{1}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}The IMU Model and Corrector}{2}}
-\newlabel{fig:gyrocorrect}{{2}{2}}
-\newlabel{fig:accelcorrect}{{3}{2}}
 \bibcite{Trawny:2005}{1}
-\bibcite{Forster:2017}{2}
-\bibcite{Forster:2015}{3}
-\bibcite{Eckenhoff:2016}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces This ROS graph shows all the ROS topics associated with aggregating IMU data and with correcting IMU measurements.}}{3}}
-\newlabel{fig:withonlinebias}{{2}{3}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Integration Algorithms and Implementation}{3}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion}{3}}
+\bibcite{Barfoot:2011}{2}
+\bibcite{Wie:2008}{3}
+\bibcite{Mirzaei:2008}{4}
+\bibcite{Hesch:2014}{5}
+\bibcite{Keivan:2015}{6}
+\bibcite{Kelly:2011}{7}
+\bibcite{Li:2013}{8}
+\bibcite{Jones:2011}{9}
+\bibcite{Artal:2017}{10}
+\bibcite{SavageP1:2007}{11}
+\bibcite{SavageP2:2007}{12}
+\bibcite{Titterton:2004}{13}
+\bibcite{Burri:2016}{14}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Future Work}{7}{section.7}}
+\bibcite{Forster:2017}{15}
+\bibcite{Forster:2015}{16}
+\bibcite{Eckenhoff:2016}{17}
+\bibcite{Savage:2009}{18}

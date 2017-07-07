@@ -34,6 +34,8 @@ using namespace Eigen;
 // Define new matrix type with dynamic number of 
 // rows and 7 columns
 typedef Matrix<double, Dynamic,7> MatrixX7d;
+// Define new vector type with 10 elements
+typedef Matrix<double, 10, 1> Vector10d;
 /*---------------- End Globals -----------------*/
 
 /*------------------- Classes ------------------*/
@@ -43,7 +45,7 @@ class IMU_Aggregator
         // Constructor
         IMU_Aggregator();
         // Parameterized Constructor
-        IMU_Aggregator(bool stop_agg_change,double time_desired_change);
+        IMU_Aggregator(bool stop_agg_change,double time_desired_change,VectorXd state_change,double start_time_change);
         // Recieve message compute_ins message to stop aggregating IMU 
         // data and compute INS solution at a given time
         void comp_ins_solCallback(const djh_ins::compute_ins::ConstPtr& msg);
@@ -72,6 +74,10 @@ class IMU_Aggregator
         // Inputs:  Matrix of IMU data (in same form as from aggregate)
         // Outputs: Matrix of IMU data (in same form as from aggregate)
         MatrixXd PrunedIMUData(MatrixXd aggregated_meas);
+        // Initial state estimate prior to INS integration
+        Vector10d state;
+        // The start time for INS integration
+        double start_time;
 };
 /*----------------- End Classes ----------------*/
 

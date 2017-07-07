@@ -34,6 +34,8 @@
 /*---------------- Globals ---------------------*/
 // Create a vector of vectors to save aggregated IMU data 
 std::vector<std::vector <double>> data_agg_save;
+double start_time;
+bool imageFunctionCalled;
 /*-------------- End Globals -------------------*/
 
 /*------------------ Classes -------------------*/
@@ -82,6 +84,28 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
     msg_out.time_desired = msg->header.stamp.toNSec()/1000000000.0;
     // We are going to publish this message now
     msg_out.header.stamp = ros::Time::now();
+    // We will also take this time as the starting time
+    if (imageFunctionCalled == false)
+    {
+        imageFunctionCalled = true;
+        start_time = msg->header.stamp.toNSec()/1000000000.0;
+        msg_out.start_time = start_time;
+    }
+    else
+    {
+        msg_out.start_time = start_time;
+    }
+    // Set initial state vector to integrate
+    msg_out.start_pose.orientation.x = 0.0;
+    msg_out.start_pose.orientation.y = 0.0;
+    msg_out.start_pose.orientation.z = 0.0;
+    msg_out.start_pose.orientation.w = 1.0;
+    msg_out.start_pose.position.x = 0.0;
+    msg_out.start_pose.position.y = 0.0;
+    msg_out.start_pose.position.z = 0.0;
+    msg_out.start_vel.x = 0.0;
+    msg_out.start_vel.y = 0.0;
+    msg_out.start_vel.z = 0.0;
     // Publish the messages now
     comp_sol.publish(msg_out);
     bias_sub.publish(bias_msg);
@@ -95,12 +119,35 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 }
 
 // This Callback saves the aggregated IMU data
-void saveAggCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
+void saveAggCallback(const djh_ins::compute_ins::ConstPtr& msg)
 {
-    data_agg_save.push_back(msg->data);
+    data_agg_save.push_back(msg->aggregatedMatrix.data);
 
     cout << "-----------------------------------------------\n";
     cout << "Saved vector now has: " << data_agg_save.size() << " matrices." << endl;
+    cout << "-----------------------------------------------\n";
+}
+
+// This callback receives the INS result and prints it
+void saveINSCallback(const djh_ins::compute_ins::ConstPtr& msg)
+{
+    // quat, position, velocity
+    VectorXd state(10);
+    state(0) = msg->start_pose.orientation.x;
+    state(1) = msg->start_pose.orientation.y;
+    state(2) = msg->start_pose.orientation.z;
+    state(3) = msg->start_pose.orientation.w;
+    state(4) = msg->start_pose.position.x;
+    state(5) = msg->start_pose.position.y;
+    state(6) = msg->start_pose.position.z;
+    state(7) = msg->start_vel.x;
+    state(8) = msg->start_vel.y;
+    state(9) = msg->start_vel.z;
+
+    start_time = msg->time_desired;
+    cout << "INS Desired time: " << start_time << endl;
+    cout << "-----------------------------------------------\n";
+    cout << "INS State is now: \n" << state << endl;
     cout << "-----------------------------------------------\n";
 }
 /*-----------------------------------------------------------------------------*/
@@ -121,6 +168,7 @@ int main(int argc, char **argv)
     // Initialize node handles
     ros::NodeHandle sub_camera;
     ros::NodeHandle agg_receiver;
+    ros::NodeHandle ins_receiver;
 
     // Subscribe to Camera data so we can aggragated 
     image_transport::ImageTransport it(sub_camera);
@@ -128,6 +176,11 @@ int main(int argc, char **argv)
 
     // Save aggregated IMU data as it is produced
     ros::Subscriber ins_sub = agg_receiver.subscribe("/aggregate_imu",1000, saveAggCallback);
+    ros::Subscriber insreceiver_sub = ins_receiver.subscribe("/ins_result",1000, saveINSCallback);
+
+    // Initialize image function called variable to false, since 
+    // it hasn't been called yet.
+    imageFunctionCalled = false;
 
 	// Broadcast a simple log message
 	ROS_INFO_STREAM("Hello, world!");
