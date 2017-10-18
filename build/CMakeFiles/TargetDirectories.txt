@@ -1,7 +1,0 @@
-/home/dave/Desktop/djh_ins/build/CMakeFiles/install.dir
-/home/dave/Desktop/djh_ins/build/CMakeFiles/list_install_components.dir
-/home/dave/Desktop/djh_ins/build/CMakeFiles/rebuild_cache.dir
-/home/dave/Desktop/djh_ins/build/CMakeFiles/djh_ins.dir
-/home/dave/Desktop/djh_ins/build/CMakeFiles/edit_cache.dir
-/home/dave/Desktop/djh_ins/build/CMakeFiles/install/strip.dir
-/home/dave/Desktop/djh_ins/build/CMakeFiles/install/local.dir
