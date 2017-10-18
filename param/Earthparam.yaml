@@ -1,9 +1,0 @@
-# Earth Parameters
-# Latitude of Urbana, IL (rad)
-latitude: 0.70004571532
-# Altitude of Urbana, IL (meters)
-altitude: 221.894
-# Mean Radius of the Earth (meters)
-EarthRad: 6371008.00
-# Rotation rate of the Earth (rad/s)
-rotEarth: 0.00007292115
