@@ -1,6 +1,6 @@
 //
 //	Quaternion math using JPL quaternion convention
-//	David Hanley, David Degenhardt, Alex Faustino
+//	David Hanley
 //	
 //	quaternion_math.cpp
 //	Quaternion math header file for the Bretl Group 
@@ -15,7 +15,8 @@
 //
 //	Usage:
 //	djh_ins_node.cpp	
-//
+//  ins_ode.cpp
+//  
 
 /*-----------------------------------------------------------------------------*/
 /*-------------------------------- Preamble -----------------------------------*/

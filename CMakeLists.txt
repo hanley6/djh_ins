@@ -1,113 +1,52 @@
+SET(PROJECT_NAME djh_ins)
+
+project(${PROJECT_NAME})
 cmake_minimum_required(VERSION 2.8.3)
-project(djh_ins)
 
-## Add support for C++11, supported in ROS Kinetic and newer
-add_definitions(-std=c++11)
+if(NOT ${CMAKE_VERSION} VERSION_LESS 3.0)
+    cmake_policy(SET CMP0026 OLD)
+endif()
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  cmake_modules
-  roscpp
-  roslib
-  image_transport
-  cv_bridge
-  message_generation
-)
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+
+############################################################
+# Build type and flags
+SET(CMAKE_BUILD_TYPE Release) # Options:  Debug, RelWithDebInfo, Release
+SET(CMAKE_CXX_FLAGS "-Wall -Werror -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unknown-pragmas")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -O0 -g")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -mmmx -msse -msse -msse2 -msse3 -mssse3 -fomit-frame-pointer")
 
 # Add plain cmake packages
 find_package(Eigen3 REQUIRED)
-find_package(OpenCV REQUIRED)
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-    compute_ins.msg
+# Add Sources
+SET(SOURCES  ${PROJECT_SOURCE_DIR}/src/quaternion_math.cpp
+             ${PROJECT_SOURCE_DIR}/src/gravity_model.cpp
+             ${PROJECT_SOURCE_DIR}/src/ins_ode.cpp
+             ${PROJECT_SOURCE_DIR}/src/preintegration.cpp
+             ${PROJECT_SOURCE_DIR}/src/integrator.cpp
+             ${PROJECT_SOURCE_DIR}/src/imu_correct.cpp
+             ${PROJECT_SOURCE_DIR}/src/djh_ins.cpp
 )
 
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-    std_msgs  
-    geometry_msgs
-    # Other packages containing msgs
+# Add library
+INCLUDE_DIRECTORIES(include/djh_ins 
+                    src
+                    ${EIGEN3_INCLUDE_DIRS}
 )
 
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
+ADD_LIBRARY(${PROJECT_NAME} SHARED ${SOURCES})
 
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if you package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-    DEPENDS 
-      EIGEN3 
-      OpenCV
-    CATKIN_DEPENDS 
-      roscpp 
-      image_transport 
-      cv_bridge
-      message_runtime
-    INCLUDE_DIRS 
-      include
-)
+################################################################################
+# Create the djh_insConfig.cmake file for other cmake projects.
+GET_TARGET_PROPERTY( FULL_LIBRARY_NAME ${PROJECT_NAME} LOCATION )
+SET(djh_ins_LIBRARIES ${FULL_LIBRARY_NAME} )
+SET(djh_ins_LIBRARY_DIR ${PROJECT_BINARY_DIR} )
+SET(djh_ins_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
+CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/djh_insConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/djh_insConfig.cmake @ONLY IMMEDIATE )
+export( PACKAGE djh_ins )
 
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-include_directories(
-  include
-  ${EIGEN3_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}
-  ${catkin_INCLUDE_DIRS}
-)
-
-## Declare a C++ library
-add_library(ins_lib
-            src/imu_corrector.cpp
-            src/aggregator.cpp
-            src/quaternion_math.cpp
-)
-
-## Declare a C++ executable
-## With catkin_make all packages are built within a single CMake context
-## The recommended prefix ensures that target names across packages don't collide
-add_executable(djh_ins_node src/djh_ins_node.cpp)
-# Add additional node
-add_executable(bare_bones_node src/bare_bones_node.cpp)
-
-## Specify libraries to link a library or executable target against
-target_link_libraries(djh_ins_node
-                      ${catkin_LIBRARIES}
-                      ins_lib
-)
-
-# Now the other node
-target_link_libraries(bare_bones_node
-                      ${catkin_LIBRARIES}
-)
-
-#############
-## Install ##
-#############
-
-
-#############
-## Testing ##
-#############
+INSTALL(DIRECTORY include/djh_ins DESTINATION ${CMAKE_INSTALL_PREFIX}/include FILES_MATCHING PATTERN "*.h" )
+INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib )
 

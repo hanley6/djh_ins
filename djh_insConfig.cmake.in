@@ -1,0 +1,17 @@
+#######################################################
+# Fast source dir
+set( djh_ins_SOURCE_DIR "@CMAKE_CURRENT_SOURCE_DIR@")
+
+#######################################################
+# Fast build dir
+set( djh_ins_DIR "@CMAKE_CURRENT_BINARY_DIR@")
+
+#######################################################
+set( djh_ins_INCLUDE_DIR  "@djh_ins_INCLUDE_DIR@" )
+set( djh_ins_INCLUDE_DIRS "@djh_ins_INCLUDE_DIR@" )
+
+set( djh_ins_LIBRARIES    "@djh_ins_LIBRARIES@" )
+set( djh_ins_LIBRARY      "@djh_ins_LIBRARIES@" )
+
+set( djh_ins_LIBRARY_DIR  "@djh_ins_LIBRARY_DIR@" )
+set( djh_ins_LIBRARY_DIRS "@djh_ins_LIBRARY_DIR@" )
