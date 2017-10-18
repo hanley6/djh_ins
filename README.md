@@ -5,7 +5,7 @@ This repository contains a C++ class for inertial navigation systems.
 
 This code takes in IMU measurements and (based on a IMU and gravity model) integrates those IMU measurements into estimated state.
 
-A detailed description of the code can be found [here](TBD).
+A detailed description of the code can be found [here](https://github.com/hanley6/djh_ins/blob/master/doc/documentation.pdf).
 
 Instructions for installing (in plain CMAKE) and testing the code in a ROS package can be found [here](https://github.com/hanley6/djh_ins/wiki).
 
