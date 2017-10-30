@@ -38,7 +38,7 @@ class QuatMath
         QuatMath();
 
         // Parameterized Constructor
-        // Inputs:  quat_inputs = JPL input quaternion of the form 
+        // Inputs:  quat_input = JPL input quaternion of the form 
         //                        [q_x, q_y, q_z, q_w]
         // Outputs: quat = class quaternion in JPL convention
         QuatMath(Vector4d quat_input);
